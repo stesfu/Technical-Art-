@@ -10,20 +10,19 @@ endTime = maya.cmds.playbackOptions(query = True, max = True)
 # Set current time to time slider start
 maya.cmds.currentTime(startTime)
 
+# Create empty list 
+shapes = []; 
+
 # Set counter 
 counter = 0
 
-# Creates shapes a random amount of times
-while counter < random.randint(10,15):
+while counter < random.randint(5, 10):
     
-    # Generate primitives 
-    cube = maya.cmds.polyCube()[0]
-    sphere = maya.cmds.polySphere()[0]
-    cone = maya.cmds.polyCone()[0]
-    taurus = maya.cmds.polyTorus()[0]
-    
-    # Put shapes in a list 
-    shapes = [cube, sphere, cone, taurus]
+    # Generate primitives and append to list
+    shapes.append(maya.cmds.polyCube()[0])
+    shapes.append(maya.cmds.polySphere()[0])
+    shapes.append(maya.cmds.polyCone()[0])
+    shapes.append(maya.cmds.polyTorus()[0])
 
     for shape in shapes:
         
