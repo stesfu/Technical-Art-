@@ -92,6 +92,7 @@ def run():
     
     maya.cmds.select(cl = True)
     maya.cmds.select(anim_joints)
+    maya.cmds.select(char_joints)
     
     maya.cmds.bakeResults(simulation = True,
                           time = (start_time, end_time),
