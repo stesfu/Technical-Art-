@@ -75,17 +75,14 @@ def run():
     anim_joints = get_joints_from_namespace(anim_ns)
         
     # Determine Start and End times 
-    start_time = maya.cmds.playbackOptions(q = True, min = True) 
-    end_time = maya.cmds.playbackOptions(q = True, max = True)  
+    start_time = maya.cmds.findKeyframe( anim_joints[0], which="first" )
+    end_time = maya.cmds.findKeyframe(anim_joints[0], which="last")  
     
-    # Attach animation to character... ik how I did
-    #comapare with list -> for loop
-
+    # Attach animation to character
     for anim_joint in anim_joints:
         for char_joint in char_joints:
             if(anim_joint.split(":")[-1] == char_joint.split(":")[-1] ):
                maya.cmds.parentConstraint( anim_joint, char_joint, mo = True )
-    
     
     # Bake animation bones
     anim_joints = get_joints_from_namespace(anim_ns)
@@ -94,7 +91,7 @@ def run():
     maya.cmds.select(anim_joints)
     
     maya.cmds.bakeResults(simulation = True,
-                          time = (0, 100),
+                          time = (start_time, end_time),
                           sampleBy = 1,
                           oversamplingRate = 1,
                           disableImplicitControl = True,
