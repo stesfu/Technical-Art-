@@ -78,12 +78,15 @@ def run():
     start_time = maya.cmds.findKeyframe( anim_joints[0], which="first" )
     end_time = maya.cmds.findKeyframe(anim_joints[0], which="last")  
     
+    # Change the the current time to the start time
+    maya.cmds.currentTime(start_time)
+    
     # Attach animation to character
     for anim_joint in anim_joints:
         for char_joint in char_joints:
             if(anim_joint.split(":")[-1] == char_joint.split(":")[-1] ):
                maya.cmds.parentConstraint( anim_joint, char_joint, mo = True )
-    
+               
     # Bake animation bones
     anim_joints = get_joints_from_namespace(anim_ns)
     
