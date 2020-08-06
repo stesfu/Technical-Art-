@@ -13,7 +13,7 @@ def create_reference(file_path, ns):
         pymel.core.error("File does not exist: {0}".format(file_path))
         return
     
-    pymel.core.system.createReference(file_path, ns = ns)
+    pymel.core.createReference(file_path, ns = ns)
  
     
     
@@ -38,15 +38,12 @@ def get_joints_from_namespace(ns):
     return maya.cmds.ls("{0}:*".format(ns), type = "joint") 
     #return pymel.core.ls("{0}:*".format(ns), type = "joint") 
 
+
 def batchAnimation():
 
     path = os.getenv("ANIM_FILE_PATH")
     
-    singlePath = path.split(";")[0]
-    
-    print singlePath
-    
-    dirs = os.listdir(singlePath)
+    dirs = os.listdir(path)
     
     for file in dirs:
         
@@ -75,6 +72,7 @@ def run(fileName):
     
     # Bring in the animation 
     #anim_path = "" already def
+    
     create_reference(anim_path, anim_ns)
     
     # Get a list of joints of both the anim and char
@@ -93,7 +91,7 @@ def run(fileName):
     for anim_joint in anim_joints:
         for char_joint in char_joints:
             if(anim_joint.split(":")[-1] == char_joint.split(":")[-1] ):
-               maya.cmds.parentConstraint( anim_joint, char_joint, mo = True )
+               pymel.core.animation.parentConstraint( anim_joint, char_joint, mo = True )
                
     # Bake animation bones
     anim_joints = get_joints_from_namespace(anim_ns)
@@ -102,7 +100,7 @@ def run(fileName):
     maya.cmds.select(anim_joints)
     maya.cmds.select(char_joints)
     
-    maya.cmds.bakeResults(simulation = True,
+    pymel.core.animation.bakeResults(simulation = True,
                           time = (start_time, end_time),
                           sampleBy = 1,
                           oversamplingRate = 1,
@@ -118,6 +116,7 @@ def run(fileName):
                        
     # Remove a reference
     maya.cmds.file(anim_path, rr = True)
+    #anim_reference.remove()
     
     # Save a file, figure out proper renaming (consider a helper function!!) 
     character_name = char_path.split("/")[-1][:-3]
@@ -132,7 +131,7 @@ def run(fileName):
     maya.cmds.file(rename = renamed_file)
     maya.cmds.file(save = True, f = True) 
 
-#animFile = "01_01.ma"
-#run(animFile)
+animFile = "01_01.ma"
+run(animFile)
 
-batchAnimation()
+#batchAnimation()
